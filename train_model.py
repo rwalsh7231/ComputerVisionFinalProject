@@ -87,8 +87,8 @@ def train_and_evaluate(params, X_train, y_train, X_test, y_test):
 def main():
     # Load dataset
     print("Loading the dataset")
-    train_df = pd.read_csv('ComputerVisionFinalProject/data/sign_mnist_train.csv')
-    test_df = pd.read_csv('ComputerVisionFinalProject/data/sign_mnist_test.csv')
+    train_df = pd.read_csv('data/sign_mnist_train.csv')
+    test_df = pd.read_csv('data/sign_mnist_test.csv')
 
     X_train = train_df.iloc[:, 1:].values.reshape(-1, 1, 28, 28).astype('float32') / 255.0
     y_train = train_df.iloc[:, 0].values
@@ -108,7 +108,7 @@ def main():
     best_model = None
 
     for params in ParameterGrid(param_grid):
-        print(f"🔍 Trying params: {params}")
+        print(f"Trying params: {params}")
         acc, model = train_and_evaluate(params, X_train, y_train, X_test, y_test)
         print(f"→ Accuracy: {acc:.4f}")
 
@@ -122,8 +122,8 @@ def main():
         torch.save(best_model.state_dict(), 'best_model.pth')
         print("\n Best model saved as 'best_model.pth'")
 
-    print("\n🏆 Best Hyperparameters:", best_params)
-    print(f"🏆 Best Accuracy: {best_acc:.4f}")
+    print("\n Best Hyperparameters:", best_params)
+    print(f"Best Accuracy: {best_acc:.4f}")
 
 
 if __name__ == "__main__":

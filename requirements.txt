@@ -1,7 +1,6 @@
 mediapipe
 pandas
 numpy
-tdqm
 torch
 torchvision
 matplotlib
