@@ -61,9 +61,9 @@ def findHand(frame):
         ymin = min(Ys)
         ymax = max(Ys)
 
-        cutFrame = frame[ymin:ymax, xmin:xmax]
+        cutFrame = frame[max(0, ymin-20):min(frame.shape[0], ymax+20), max(0, xmin-20):min(frame.shape[1], xmax+20)]
 
-        cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
+        cv2.rectangle(frame, (max(0, xmin-20), max(0, ymin-20)), (min(frame.shape[1], xmax+20), min(frame.shape[0], ymax+20)), (0, 255, 0), 2)
 
     return frame, cutFrame
 
