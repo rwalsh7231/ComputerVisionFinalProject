@@ -5,9 +5,9 @@ import cv2
 import os
 import copy
 
-directory = "up"
-fileName = "upRHand"
-frameCount = 100
+directory = "right"
+fileName = "rightRHand"
+frameCount = 200
 waitTime = 0.1
 
 # use this to identify our hands
