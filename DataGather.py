@@ -5,10 +5,10 @@ import cv2
 import os
 import copy
 
-directory = "b"
-fileName = "bLHand"
-frameCount = 10
-waitTime = 3
+directory = "up"
+fileName = "upRHand"
+frameCount = 100
+waitTime = 0.1
 
 # use this to identify our hands
 def findHand(frame):
