@@ -96,18 +96,18 @@ while True:
             predicted_class = predict_hand(cutFrame)
             print(f"Predicted Class: {predicted_class}")
 
-            # if predicted_class == 0:
-            #     keyboard.press('z')
-            # elif predicted_class == 1:
-            #     keyboard.press('x')
-            # elif predicted_class == 2:
-            #     keyboard.press(Key.down)
-            # elif predicted_class == 3:
-            #     keyboard.press(Key.left)
-            # elif predicted_class == 4:
-            #     keyboard.press(Key.right)
-            # else:
-            #     keyboard.press(Key.up)
+            if predicted_class == 0:
+                keyboard.press('x')
+            elif predicted_class == 1:
+                keyboard.press('z')
+            elif predicted_class == 2:
+                keyboard.press(Key.down)
+            elif predicted_class == 3:
+                keyboard.press(Key.left)
+            elif predicted_class == 4:
+                keyboard.press(Key.right)
+            else:
+                keyboard.press(Key.up)
 
     # Display the frame
     cv2.imshow("frame", frame)
