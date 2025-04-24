@@ -4,13 +4,15 @@ import mediapipe as mp
 import cv2
 import os
 import copy
+from PIL import Image
+import numpy as np
 
 
 # CHANGE THESE TO SAVE FILES IN SPECIFIC FOLDERS
-directory = "right"  # CHANGE TO GO INTO SPECIFIC FOLDER
-fileName = "rightRHand"  # NAME OF FILE (filename)i.jpg is the full name of file when saved where i is the frame count
-frameCount = 200  # HOW MANY FRAMES TO SAVE
-waitTime = 0.1  # HOW LONG IN SECs TO WAIT
+directory = "up"  # CHANGE TO GO INTO SPECIFIC FOLDER
+fileName = "upleftHand"  # NAME OF FILE (filename)i.jpg is the full name of file when saved where i is the frame count
+frameCount = 500  # HOW MANY FRAMES TO SAVE
+waitTime = 0.01  # HOW LONG IN SECs TO WAIT
 
 # use this to identify our hands
 def findHand(frame):
@@ -43,9 +45,9 @@ def findHand(frame):
         ymin = min(Ys)
         ymax = max(Ys)
 
-        cutFrame = copy.deepcopy(frame[max(0, ymin - 50):min(frame.shape[0], ymax + 50), max(0, xmin - 50):min(frame.shape[1], xmax + 50)])
+        cutFrame = copy.deepcopy(frame[max(0, ymin - 10):min(frame.shape[0], ymax + 10), max(0, xmin - 10):min(frame.shape[1], xmax + 10)])
 
-        cv2.rectangle(frame, (max(0, xmin - 20), max(0, ymin - 20)), (min(frame.shape[1], xmax + 20), min(frame.shape[0], ymax + 20)), (0, 255, 0), 2)
+        cv2.rectangle(frame, (max(0, xmin - 10), max(0, ymin - 10)), (min(frame.shape[1], xmax + 10), min(frame.shape[0], ymax + 10)), (0, 255, 0), 2)
 
     # return the frame, and the cropped frame (if applicable)
     return frame, cutFrame
@@ -81,6 +83,12 @@ while True:
         if cutFrame.shape[0] != 0 and cutFrame.shape[1] != 0:
             cv2.imshow("cutFrame", cutFrame)
             framesCaptured += 1
+
+            cutFrame = Image.fromarray(cutFrame)
+            cutFrame = cutFrame.convert("L")
+            cutFrame = cutFrame.resize((128, 128))
+
+            cutFrame = np.array(cutFrame)
 
             cv2.imwrite("HandData/{}/{}.jpg".format(directory, fileName + str(framesCaptured)), cutFrame)
 

@@ -10,7 +10,7 @@ from torchvision import transforms
 from PIL import Image
 import os
 
-EPOCHS=25
+EPOCHS=10
 
 class CustomDataset(Dataset):
     def __init__(self, images, labels):
@@ -114,8 +114,8 @@ def main():
     for i in range(len(directories)):
         for fileName in os.listdir("HandData/{}".format(directories[i])):
             image = Image.open(os.path.join("HandData/{}".format(directories[i]), fileName))
-            image = image.resize((128, 128))
-            image = image.convert('L')
+            # image = image.resize((128, 128))
+            # image = image.convert('L')
             image = np.array(image)
             images.append(image)
             imageLabels.append(labels[i])
@@ -124,7 +124,7 @@ def main():
     images = np.array(images)
     imageLabels = np.array(imageLabels)
 
-    xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.25)
+    xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.15)
 
     accuracy, model = train_and_evaluate(xTrain, yTrain, xTest, yTest)
 

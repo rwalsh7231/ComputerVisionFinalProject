@@ -43,7 +43,7 @@ def findHand(frame):
         ymin = min(Ys)
         ymax = max(Ys)
 
-        cutFrame = copy.deepcopy(frame[max(0, ymin-100):min(frame.shape[0], ymax+100), max(0, xmin-100):min(frame.shape[1], xmax+100)])
+        cutFrame = copy.deepcopy(frame[max(0, ymin-10):min(frame.shape[0], ymax+10), max(0, xmin-10):min(frame.shape[1], xmax+10)])
 
         cv2.rectangle(frame, (max(0, xmin-100), max(0, ymin-100)), (min(frame.shape[1], xmax+100), min(frame.shape[0], ymax+100)), (0, 255, 0), 2)
 
@@ -60,8 +60,8 @@ if not cap.isOpened():
 # Function to predict using the model
 def predict_hand(cut_frame):
     cut_frame = Image.fromarray(cut_frame)
-    image = cut_frame.resize((128, 128))
-    image = image.convert('L')
+    image = cut_frame.convert('L')
+    image = image.resize((128, 128))
     image = np.array(image)
     image = image.astype(np.float32) / 255.0
 
@@ -96,18 +96,18 @@ while True:
             predicted_class = predict_hand(cutFrame)
             print(f"Predicted Class: {predicted_class}")
 
-            if predicted_class == 0:
-                keyboard.press('x')
-            elif predicted_class == 1:
-                keyboard.press('z')
-            elif predicted_class == 2:
-                keyboard.press(Key.down)
-            elif predicted_class == 3:
-                keyboard.press(Key.left)
-            elif predicted_class == 4:
-                keyboard.press(Key.right)
-            else:
-                keyboard.press(Key.up)
+            # if predicted_class == 0:
+            #     keyboard.tap('x')
+            # elif predicted_class == 1:
+            #     keyboard.tap('z')
+            # elif predicted_class == 2:
+            #     keyboard.tap(Key.down)
+            # elif predicted_class == 3:
+            #     keyboard.tap(Key.left)
+            # elif predicted_class == 4:
+            #     keyboard.tap(Key.right)
+            # else:
+            #     keyboard.tap(Key.up)
 
     # Display the frame
     cv2.imshow("frame", frame)
