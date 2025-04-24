@@ -105,6 +105,7 @@ def main():
     # Load dataset
     print("Loading the dataset")
 
+    #0 = a, 1 = b, 2 = down, 3 = left, 4 = right, 5 = up
     labels = [0, 1, 2, 3, 4, 5]
     directories = ['a', 'b', 'down', 'left', 'right', 'up']
 

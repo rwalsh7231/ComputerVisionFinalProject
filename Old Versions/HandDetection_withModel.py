@@ -5,18 +5,36 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
-import numpy as np
-from trainCustom import CNN
 
-from pynput.keyboard import Key, Controller
+# Define the CNN model as in train_model.py
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, 3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, 25)  # 25 classes (A-Y, no J)
 
-import copy
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
 
-keyboard = Controller()
+# Define the transformation to convert the cropped frame into the format the model expects
+transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((28, 28)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))
+])
 
 # Load the best model
 model = CNN()
-model.load_state_dict(torch.load('custom_model.pth'))
+model.load_state_dict(torch.load('best_model.pth'))
 model.eval()  # Set the model to evaluation mode
 
 # Initialize the mediapipe hands model
@@ -43,9 +61,9 @@ def findHand(frame):
         ymin = min(Ys)
         ymax = max(Ys)
 
-        cutFrame = copy.deepcopy(frame[max(0, ymin-100):min(frame.shape[0], ymax+100), max(0, xmin-100):min(frame.shape[1], xmax+100)])
+        cutFrame = frame[max(0, ymin-20):min(frame.shape[0], ymax+20), max(0, xmin-20):min(frame.shape[1], xmax+20)]
 
-        cv2.rectangle(frame, (max(0, xmin-100), max(0, ymin-100)), (min(frame.shape[1], xmax+100), min(frame.shape[0], ymax+100)), (0, 255, 0), 2)
+        cv2.rectangle(frame, (max(0, xmin-20), max(0, ymin-20)), (min(frame.shape[1], xmax+20), min(frame.shape[0], ymax+20)), (0, 255, 0), 2)
 
     return frame, cutFrame
 
@@ -59,16 +77,8 @@ if not cap.isOpened():
 
 # Function to predict using the model
 def predict_hand(cut_frame):
-    cut_frame = Image.fromarray(cut_frame)
-    image = cut_frame.resize((128, 128))
-    image = image.convert('L')
-    image = np.array(image)
-    image = image.astype(np.float32) / 255.0
-
-    image = np.expand_dims(image, axis=0)
-    image = np.expand_dims(image, axis=0)
-
-    image = torch.tensor(image, dtype=torch.float32)
+    pil_image = Image.fromarray(cut_frame)
+    image = transform(pil_image).unsqueeze(0)  # Add batch dimension
 
     # Make the prediction
     with torch.no_grad():
@@ -95,19 +105,6 @@ while True:
             # Predict the class of the hand gesture
             predicted_class = predict_hand(cutFrame)
             print(f"Predicted Class: {predicted_class}")
-
-            # if predicted_class == 0:
-            #     keyboard.press('z')
-            # elif predicted_class == 1:
-            #     keyboard.press('x')
-            # elif predicted_class == 2:
-            #     keyboard.press(Key.down)
-            # elif predicted_class == 3:
-            #     keyboard.press(Key.left)
-            # elif predicted_class == 4:
-            #     keyboard.press(Key.right)
-            # else:
-            #     keyboard.press(Key.up)
 
     # Display the frame
     cv2.imshow("frame", frame)

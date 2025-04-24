@@ -5,10 +5,12 @@ import cv2
 import os
 import copy
 
-directory = "right"
-fileName = "rightRHand"
-frameCount = 200
-waitTime = 0.1
+
+# CHANGE THESE TO SAVE FILES IN SPECIFIC FOLDERS
+directory = "right"  # CHANGE TO GO INTO SPECIFIC FOLDER
+fileName = "rightRHand"  # NAME OF FILE (filename)i.jpg is the full name of file when saved where i is the frame count
+frameCount = 200  # HOW MANY FRAMES TO SAVE
+waitTime = 0.1  # HOW LONG IN SECs TO WAIT
 
 # use this to identify our hands
 def findHand(frame):
