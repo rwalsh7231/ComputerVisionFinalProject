@@ -11,10 +11,8 @@ from PIL import Image
 import os
 import cv2
 import copy
-import mediapipe as mp
 
-hands = mp.solutions.hands.Hands()
-EPOCHS=25
+EPOCHS=10
 
 class CustomDataset(Dataset):
     def __init__(self, images, labels):
@@ -134,7 +132,7 @@ def main():
     imageLabels = np.array(imageLabels)
 
     print("Splitting dataset into train and test sets")
-    xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.25)
+    xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.15)
 
     print("Training and evaluating model")
     accuracy, model = train_and_evaluate(xTrain, yTrain, xTest, yTest)
