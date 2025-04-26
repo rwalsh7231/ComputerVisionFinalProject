@@ -11,7 +11,7 @@ from torchvision import transforms
 from PIL import Image
 import os
 
-EPOCHS=20
+EPOCHS=10
 
 transform = transforms.Compose([
     torchvision.transforms.RandomAffine(degrees=10, translate=(0.1, 0.1)),
@@ -62,7 +62,7 @@ class CNN(nn.Module):
 
 
 # Training and testing the model
-def train_and_evaluate(X_train, y_train, X_test, y_test):
+def train_and_evaluate(X_train, y_train, X_test, y_test, model=None):
 
     train_data = CustomDataset(X_train, y_train, transform) # Creating training dataset
     test_data = CustomDataset(X_test, y_test, transform) # Creating testing dataset
@@ -70,10 +70,12 @@ def train_and_evaluate(X_train, y_train, X_test, y_test):
     train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
 
-    model = CNN()
+    if not model:
+        model = CNN()
+
     criterion = nn.CrossEntropyLoss() # Using Cross entropy loss
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.00005)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     print("Training the model")
     for epoch in range(EPOCHS):
@@ -114,6 +116,13 @@ def train_and_evaluate(X_train, y_train, X_test, y_test):
 
 
 def main():
+
+    if os.path.exists("custom_model.pth"):
+        model = CNN()
+        model.load_state_dict(torch.load("custom_model.pth"))
+    else:
+        model = None
+
     # Load dataset
     print("Loading the dataset")
 
@@ -136,7 +145,7 @@ def main():
 
     xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.15)
 
-    accuracy, model = train_and_evaluate(xTrain, yTrain, xTest, yTest)
+    accuracy, model = train_and_evaluate(xTrain, yTrain, xTest, yTest, model)
 
     print("Train success, Accuracy: {}".format(accuracy))
 
