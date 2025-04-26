@@ -1,3 +1,4 @@
+import torchvision.transforms
 from sklearn.model_selection import ParameterGrid, train_test_split
 from sklearn.metrics import accuracy_score
 import pandas as pd
@@ -10,10 +11,15 @@ from torchvision import transforms
 from PIL import Image
 import os
 
-EPOCHS=10
+EPOCHS=20
+
+transform = transforms.Compose([
+    torchvision.transforms.RandomAffine(degrees=10, translate=(0.1, 0.1)),
+    torchvision.transforms.ColorJitter(brightness=0.3, contrast=0.3)
+])
 
 class CustomDataset(Dataset):
-    def __init__(self, images, labels):
+    def __init__(self, images, labels, transform):
 
         images = images.astype(np.float32) / 255.0
 
@@ -21,12 +27,18 @@ class CustomDataset(Dataset):
 
         self.images = torch.tensor(images, dtype=torch.float32)
         self.labels = torch.tensor(labels, dtype=torch.long)
+        self.transform = transform
 
     def __len__(self):
         return len(self.labels)
 
     def __getitem__(self, idx):
-        return self.images[idx], self.labels[idx]
+        image = self.images[idx]
+        label = self.labels[idx]
+
+        image = self.transform(image)
+
+        return image, label
 
 
 class CNN(nn.Module):
@@ -52,8 +64,8 @@ class CNN(nn.Module):
 # Training and testing the model
 def train_and_evaluate(X_train, y_train, X_test, y_test):
 
-    train_data = CustomDataset(X_train, y_train) # Creating training dataset
-    test_data = CustomDataset(X_test, y_test) # Creating testing dataset
+    train_data = CustomDataset(X_train, y_train, transform) # Creating training dataset
+    test_data = CustomDataset(X_test, y_test, transform) # Creating testing dataset
 
     train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
@@ -114,8 +126,6 @@ def main():
     for i in range(len(directories)):
         for fileName in os.listdir("HandData/{}".format(directories[i])):
             image = Image.open(os.path.join("HandData/{}".format(directories[i]), fileName))
-            # image = image.resize((128, 128))
-            # image = image.convert('L')
             image = np.array(image)
             images.append(image)
             imageLabels.append(labels[i])

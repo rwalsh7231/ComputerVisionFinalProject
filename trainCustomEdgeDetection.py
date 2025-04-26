@@ -12,7 +12,7 @@ import os
 import cv2
 import copy
 
-EPOCHS=10
+EPOCHS=25
 
 class CustomDataset(Dataset):
     def __init__(self, images, labels):
@@ -116,6 +116,10 @@ def main():
     for i in range(len(directories)):
         for fileName in os.listdir("HandData/{}".format(directories[i])):
             image = Image.open(os.path.join("HandData/{}".format(directories[i]), fileName))
+
+            # apply a random rotation, hopefully should make it more resilient
+            image = image.rotate(np.random.randint(-10, 10))
+
             image = np.array(image)
         
             # Resize 
