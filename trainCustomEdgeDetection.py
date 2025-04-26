@@ -104,33 +104,6 @@ def train_and_evaluate(X_train, y_train, X_test, y_test):
     acc = accuracy_score(all_labels, all_preds)
     return acc, model
 
-# Function to find the hand and crop the frame
-def findHand(frame):
-    img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = hands.process(img)
-    cutFrame = None
-
-    h, w, c = img.shape
-    if results.multi_hand_landmarks:
-        hand1 = results.multi_hand_landmarks[0]
-        Xs = []
-        Ys = []
-        for landmark in hand1.landmark:
-            cx, cy = int(landmark.x * w), int(landmark.y * h)
-            Xs.append(cx)
-            Ys.append(cy)
-
-        xmin = min(Xs)
-        xmax = max(Xs)
-        ymin = min(Ys)
-        ymax = max(Ys)
-
-        cutFrame = copy.deepcopy(frame[max(0, ymin-100):min(frame.shape[0], ymax+100), max(0, xmin-100):min(frame.shape[1], xmax+100)])
-
-        cv2.rectangle(frame, (max(0, xmin-100), max(0, ymin-100)), (min(frame.shape[1], xmax+100), min(frame.shape[0], ymax+100)), (0, 255, 0), 2)
-
-    return frame, cutFrame
-
 def main():
     # Load dataset
     print("Loading the dataset")
@@ -141,27 +114,17 @@ def main():
 
     images = []
     imageLabels = []
+    print("Iterating through data")
     for i in range(len(directories)):
-        for fileName in os.listdir(f"HandData/{directories[i]}"):
-            # Load the image
-            image_path = os.path.join(f"HandData/{directories[i]}", fileName)
-            image = cv2.imread(image_path)
-
-            if image is None:
-                continue  # skip if image not loaded properly
-
-            # Use findHand to crop the hand
-            _, cropped = findHand(image)
-
-            if cropped is None:
-                continue  # skip if no hand was detected
-
-            # Resize and convert to grayscale
-            cropped = cv2.resize(cropped, (128, 128))
-            cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+        for fileName in os.listdir("HandData/{}".format(directories[i])):
+            image = Image.open(os.path.join("HandData/{}".format(directories[i]), fileName))
+            image = np.array(image)
+        
+            # Resize 
+            image= cv2.resize(image, (128, 128))
 
             # === Apply Canny Edge Detection ===
-            edge_image = cv2.Canny(cropped, threshold1=100, threshold2=100)
+            edge_image = cv2.Canny(image, threshold1=100, threshold2=100)
 
             images.append(edge_image)
             imageLabels.append(labels[i])
@@ -170,8 +133,10 @@ def main():
     images = np.array(images)
     imageLabels = np.array(imageLabels)
 
+    print("Splitting dataset into train and test sets")
     xTrain, xTest, yTrain, yTest = train_test_split(images, imageLabels, test_size=0.25)
 
+    print("Training and evaluating model")
     accuracy, model = train_and_evaluate(xTrain, yTrain, xTest, yTest)
 
     print("Train success, Accuracy: {}".format(accuracy))
