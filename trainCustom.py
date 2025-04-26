@@ -75,7 +75,7 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, model=None):
 
     criterion = nn.CrossEntropyLoss() # Using Cross entropy loss
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
 
     print("Training the model")
     for epoch in range(EPOCHS):
