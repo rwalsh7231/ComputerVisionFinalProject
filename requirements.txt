@@ -6,3 +6,6 @@ torchvision
 matplotlib
 opencv-python
 scikit-learn
+msvc-runtime
+Pillow
+tensorflow
