@@ -11,8 +11,10 @@ from torchvision import transforms
 from PIL import Image
 import os
 
+# how many times we run the training
 EPOCHS=10
 
+# apply a transform to help make model resilient
 transform = transforms.Compose([
     torchvision.transforms.RandomAffine(degrees=10, translate=(0.1, 0.1)),
     torchvision.transforms.ColorJitter(brightness=0.3, contrast=0.3)
