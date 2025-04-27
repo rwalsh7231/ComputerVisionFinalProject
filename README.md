@@ -27,6 +27,8 @@ We checked its accuracy each epoch, and watched as it slowly became better.
 ### HandDetection.py
 This is an early version, and base, of our hand detection script. Using the mediapipe Hands() model, we were able to identify and crop frames to just show our hands in an image. It was our hope that by doing this, we can make a more accurate gesture recognition model
 
+hand-gesture-recognition-mediapipe-main Directory
+This is the other model we developed by modifiying the git source code from this repo: https://github.com/kinivi/hand-gesture-recognition-mediapipe/tree/main. In the folder there is an app.py which exectures the main script and starts the hand modeling gesture recognizer. It uses the model developed by keypoint_classification_EN.ipynb trough the file keypoint_classification.ipynb. We modified it by adding classes and adjusting the existing model to accomidate for those classes. We also added functionality to press the burrons needed for the NES retroarch emulator. This was done in order to control mario in the NES emulator.
 
 ## AI Usage
 We have indeed used ChatGPT to help us with improving the accuracy of our model. When we first began training our model, the best we could get was about 40% even after many epochs.
