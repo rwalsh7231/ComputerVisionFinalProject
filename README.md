@@ -2,6 +2,8 @@
 
 ## Created by Robert Walsh, Jash Narwani, and Haris Naveed
 
+### Github Link: https://github.com/rwalsh7231/ComputerVisionFinalProject
+
 This project is a combination of two methods. A prebuilt object detection model for identifying hands from the mediapipe package, and a Convolutional Neural Network for Gesture Identification.
 The purpose of these methods is to combine the two and make a quick and efficient gesture recognition system. In our case, we have applied our system to act as a controller replacement for games such as with the NES.
 
