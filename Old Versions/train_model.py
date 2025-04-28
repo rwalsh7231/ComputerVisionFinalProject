@@ -9,6 +9,11 @@ from torch.utils.data import Dataset, DataLoader
 
 EPOCHS=5
 
+'''
+This class setups the dataset with sign language dataset from Kaggle. 
+Data: https://www.kaggle.com/datasets/datamunge/sign-language-mnist
+It converts the images and labels into tensor types. 
+'''
 class SignLanguageDataset(Dataset):
     def __init__(self, images, labels):
         self.images = torch.tensor(images)
@@ -21,6 +26,10 @@ class SignLanguageDataset(Dataset):
         return self.images[idx], self.labels[idx]
 
 
+'''
+This model has 2 2d convolutional layers with a maxpool of size 2. 
+In addition, there are two linear layers. 
+'''
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
