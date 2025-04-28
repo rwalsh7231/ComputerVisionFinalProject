@@ -37,11 +37,27 @@ We checked its accuracy each epoch, and watched as it slowly became better.
 
 This is an early version, and base, of our hand detection script. Using the mediapipe Hands() model, we were able to identify and crop frames to just show our hands in an image. It was our hope that by doing this, we can make a more accurate gesture recognition model
 
-## hand-gesture-recognition-mediapipe-main Directory
+### Example Data
+
+This directory contains a few example inputs that are used in the notebook for those who do not have cameras or are experiencing issues using the model
+
+### HandData
+
+This directory contains the training data for our custom model, each image has been pre-converted to grayscale and downsized to 128x128 pixels
+
+### Old Versions
+
+This directory contains old code for our various iterations of models and training cycles
+
+### Recordings
+
+This directory contains the recordings of a few demos of us using the models. CNN Demonstration in particular is the demo of our official custom model
+
+### hand-gesture-recognition-mediapipe-main Directory
 
 This is the other model we developed by modifiying the git source code from this repo: https://github.com/kinivi/hand-gesture-recognition-mediapipe/tree/main. In the folder there is an app.py which exectures the main script and starts the hand modeling gesture recognizer. It uses the model developed by keypoint_classification_EN.ipynb trough the file keypoint_classification.ipynb. We modified it by adding classes and adjusting the existing model to accomidate for those classes. We also added functionality to press the buttons needed for the NES retroarch emulator. This was done in order to control mario in the NES emulator. There is a demo of this model in the recordings directory called CompVdemo.txt which leads to a youtube video of the demo
 
-## AI Usage
+# AI Usage
 
 We have indeed used ChatGPT to help us with improving the accuracy of our model. When we first began training our model, the best we could get was about 40% even after many epochs.
 With the usage of the AI, we were able to determine a better setup for our model's layers. We converted our layers to
