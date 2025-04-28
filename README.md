@@ -14,6 +14,11 @@ We have also recorded our experiences with our models, that way one can still se
 
 ## Details of Files
 
+### Emulated Controller.ipynb
+
+This is the main file for our system, it is here where you can experience and use the systems we created.
+It supports activities for both using the model as intended or just demonstrating its functionality with an example dataset
+
 ### Data Gather.py
 
 This is the file we used to generate our main dataset in the HandData folder. Simply put, the program is designed to take a series of photos of an individual's hands (aided by the mediapipe package).
